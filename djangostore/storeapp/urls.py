@@ -11,6 +11,7 @@ router = routers.DefaultRouter()
 
 # define the router path and viewset to be used
 router.register(r'collections', CollectionViewSet)
+router.register(r'posts', PostViewSet)
 
 # specify URL Path for rest_framework
 urlpatterns = [
