@@ -60,3 +60,17 @@ class News(models.Model):
         return self.title
     def __str__(self):
         return self.title
+
+
+# PublicOffer
+class PublicOffer(models.Model):
+    title = models.CharField(db_column='title', max_length=100, blank=False)
+    description = RichTextField(blank=True, null=True)
+    class Meta:
+        db_table = 'publicoffer'
+        verbose_name = 'Publicoffer'
+        verbose_name_plural = 'Publicoffers'
+    def __unicode__(self):
+        return self.title
+    def __str__(self):
+        return self.title

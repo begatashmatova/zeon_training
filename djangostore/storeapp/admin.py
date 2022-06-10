@@ -3,6 +3,7 @@ from .models import Benefit
 from .models import Collection
 from .models import Post
 from .models import News
+from .models import PublicOffer
 
 # Register your models here.
 class BenefitAdmin(admin.ModelAdmin):
@@ -24,3 +25,8 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'photo')
 
 admin.site.register(News, NewsAdmin)
+
+class PublicOfferAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description')
+
+admin.site.register(PublicOffer, PublicOfferAdmin)

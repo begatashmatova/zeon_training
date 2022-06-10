@@ -5,6 +5,7 @@ from rest_framework import serializers
 from .models import Collection
 from .models import Post
 from .models import News
+from .models import PublicOffer
   
 # Create a model serializer 
 class CollectionSerializer(serializers.HyperlinkedModelSerializer):
@@ -23,5 +24,11 @@ class NewsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = News
         fields = ('id', 'title', 'description', 'photo')
+
+
+class PublicOfferSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = PublicOffer
+        fields = ('id', 'title', 'description')
 
 

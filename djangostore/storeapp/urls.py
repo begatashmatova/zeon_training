@@ -13,6 +13,7 @@ router = routers.DefaultRouter()
 router.register(r'collections', CollectionViewSet)
 router.register(r'posts', PostViewSet)
 router.register(r'news', NewsViewSet)
+router.register(r'publicoffer', PublicOfferViewSet)
 
 # specify URL Path for rest_framework
 urlpatterns = [
