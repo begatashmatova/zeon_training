@@ -12,9 +12,13 @@ router = routers.DefaultRouter()
 # define the router path and viewset to be used
 router.register(r'collections', CollectionViewSet)
 router.register(r'posts', PostViewSet)
+router.register(r'news', NewsViewSet)
 
 # specify URL Path for rest_framework
 urlpatterns = [
 	path('', include(router.urls)),
 	path('api-auth/', include('rest_framework.urls'))
 ]
+
+
+

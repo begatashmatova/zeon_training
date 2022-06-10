@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Benefit
 from .models import Collection
 from .models import Post
+from .models import News
 
 # Register your models here.
 class BenefitAdmin(admin.ModelAdmin):
@@ -18,3 +19,8 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'photo1', 'photo2', 'photo3')
 
 admin.site.register(Post, PostAdmin)
+
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'photo')
+
+admin.site.register(News, NewsAdmin)
