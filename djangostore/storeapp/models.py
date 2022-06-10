@@ -62,7 +62,7 @@ class News(models.Model):
         return self.title
 
 
-# PublicOffer
+# Public Offer
 class PublicOffer(models.Model):
     title = models.CharField(db_column='title', max_length=100, blank=False)
     description = RichTextField(blank=True, null=True)
@@ -70,6 +70,21 @@ class PublicOffer(models.Model):
         db_table = 'publicoffer'
         verbose_name = 'Publicoffer'
         verbose_name_plural = 'Publicoffers'
+    def __unicode__(self):
+        return self.title
+    def __str__(self):
+        return self.title
+
+
+
+# Main Page
+class MainPage(models.Model):
+    link = models.CharField(db_column='link', max_length=100, blank=True)
+    photo = models.BinaryField(db_column='photo', blank=True, null=True, editable=True)
+    class Meta:
+        db_table = 'mainpage'
+        verbose_name = 'Main page'
+        verbose_name_plural = 'Main pages'
     def __unicode__(self):
         return self.title
     def __str__(self):
