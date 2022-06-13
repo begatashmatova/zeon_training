@@ -5,7 +5,8 @@ from ckeditor.fields import RichTextField
 class Benefit(models.Model):
     title = models.CharField(db_column='title', max_length=100, blank=False)
     description = models.TextField(db_column='description', max_length=1000, blank=False)
-    icon = models.BinaryField(db_column='icon', blank=True, null=True, editable=True)
+    icon = models.ImageField(null=True, blank=True, upload_to='images/')
+
     class Meta:
         db_table = 'benefit'
         verbose_name = 'Benefit'
@@ -19,7 +20,7 @@ class Benefit(models.Model):
 # Collection
 class Collection(models.Model):
     title = models.CharField(db_column='title', max_length=100, blank=False)
-    photo = models.BinaryField(db_column='photo', blank=True, null=True, editable=True)
+    photo = models.ImageField(null=True, blank=True, upload_to='images/')
     class Meta:
         db_table = 'collection'
         verbose_name = 'Collection'
@@ -34,9 +35,9 @@ class Collection(models.Model):
 class Post(models.Model):
     title = models.CharField(db_column='title', max_length=100, blank=False)
     description = RichTextField(blank=True, null=True)
-    photo1 = models.BinaryField(db_column='photo1', blank=True, null=True, editable=True)
-    photo2 = models.BinaryField(db_column='photo2', blank=True, null=True, editable=True)
-    photo3 = models.BinaryField(db_column='photo3', blank=True, null=True, editable=True)
+    photo1 = models.ImageField(null=True, blank=True, upload_to='images/')
+    photo2 = models.ImageField(null=True, blank=True, upload_to='images/')
+    photo3 = models.ImageField(null=True, blank=True, upload_to='images/')
     class Meta:
         db_table = 'post'
         verbose_name = 'Post'
@@ -51,7 +52,7 @@ class Post(models.Model):
 class News(models.Model):
     title = models.CharField(db_column='title', max_length=100, blank=False)
     description = RichTextField(blank=True, null=True)
-    photo = models.BinaryField(db_column='photo', blank=True, null=True, editable=True)
+    photo = models.ImageField(null=True, blank=True, upload_to='images/')
     class Meta:
         db_table = 'news'
         verbose_name = 'News'
@@ -69,7 +70,7 @@ class PublicOffer(models.Model):
     class Meta:
         db_table = 'publicoffer'
         verbose_name = 'Publicoffer'
-        verbose_name_plural = 'Publicoffers'
+        verbose_name_plural = 'Public offers'
     def __unicode__(self):
         return self.title
     def __str__(self):
@@ -80,7 +81,7 @@ class PublicOffer(models.Model):
 # Main Page
 class MainPage(models.Model):
     link = models.CharField(db_column='link', max_length=100, blank=True)
-    photo = models.BinaryField(db_column='photo', blank=True, null=True, editable=True)
+    photo = models.ImageField(null=True, blank=True, upload_to='images/')
     class Meta:
         db_table = 'mainpage'
         verbose_name = 'Main page'
