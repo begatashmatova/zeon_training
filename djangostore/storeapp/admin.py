@@ -6,6 +6,8 @@ from .models import News
 from .models import PublicOffer
 from .models import MainPage
 
+from .models import Product
+
 # Register your models here.
 class BenefitAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'icon')
@@ -36,3 +38,9 @@ class MainPageAdmin(admin.ModelAdmin):
     list_display = ('link', 'photo')
 
 admin.site.register(MainPage, MainPageAdmin)
+
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('item', 'photo', 'collection', 'description')
+
+admin.site.register(Product, ProductAdmin)

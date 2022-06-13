@@ -90,3 +90,21 @@ class MainPage(models.Model):
         return self.title
     def __str__(self):
         return self.title
+
+
+# Product
+class Product(models.Model):
+    item = models.CharField(db_column='title', max_length=100, blank=True)
+    collection = models.CharField(max_length=256, choices=list(Collection.objects.values_list("title", "title")), null= True)
+    photo = models.ImageField(null=True, blank=True, upload_to='images/')
+    description = RichTextField(blank=True, null=True)
+    class Meta:
+        db_table = 'product'
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
+    def __unicode__(self):
+        return self.title
+    def __str__(self):
+        return self.title
+
+
