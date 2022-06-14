@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 
 # import local data
-from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer
+from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer
 #from .serializers import PostSerializer
 from .pagination import CustomPageNumberPagination
 
@@ -10,6 +10,7 @@ from .models import Collection
 from .models import Post
 from .models import News
 from .models import PublicOffer
+from .models import Product
 
 # create a viewset
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -35,3 +36,7 @@ class PublicOfferViewSet(viewsets.ModelViewSet):
 	queryset = PublicOffer.objects.all()
 	serializer_class = PublicOfferSerializer
 
+
+class ProductViewSet(viewsets.ModelViewSet):
+	queryset = Product.objects.all()
+	serializer_class = ProductSerializer

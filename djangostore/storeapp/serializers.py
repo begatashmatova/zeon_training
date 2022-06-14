@@ -6,6 +6,8 @@ from .models import Collection
 from .models import Post
 from .models import News
 from .models import PublicOffer
+from .models import Product
+from .models import ProductImage
   
 # Create a model serializer 
 class CollectionSerializer(serializers.HyperlinkedModelSerializer):
@@ -30,5 +32,17 @@ class PublicOfferSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PublicOffer
         fields = ('id', 'title', 'description')
+        
 
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ['color', 'photo']
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    colors = ProductImageSerializer(many=True, read_only=True)
+    class Meta:
+        model = Product
+        fields = ('item', 'title', 'description', 'colors')
 
