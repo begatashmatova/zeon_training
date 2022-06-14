@@ -7,6 +7,7 @@ from .models import PublicOffer
 from .models import MainPage
 
 from .models import Product
+from .models import ProductImage
 
 # Register your models here.
 class BenefitAdmin(admin.ModelAdmin):
@@ -40,7 +41,16 @@ class MainPageAdmin(admin.ModelAdmin):
 admin.site.register(MainPage, MainPageAdmin)
 
 
+class ProductInline(admin.TabularInline):
+    model = ProductImage
+    extra = 0
+    max_num = 8
+
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('item', 'photo', 'collection', 'description')
+    list_display = ('item', 'title','collection', 'description', 'price', 'discount', 'old_price', 'size', 'size_count', 'hits', 'novelty', 'favorite', 'fabric_composition', 'fabric')
+    inlines = [
+        ProductInline,
+    ]
 
 admin.site.register(Product, ProductAdmin)
+
