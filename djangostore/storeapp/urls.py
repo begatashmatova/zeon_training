@@ -2,6 +2,7 @@
 from django.urls import include, path
 # import routers
 from rest_framework import routers
+from rest_framework import renderers
 
 # import everything from views
 from .views import *
@@ -19,8 +20,7 @@ router.register(r'products', ProductViewSet)
 # specify URL Path for rest_framework
 urlpatterns = [
 	path('', include(router.urls)),
-	path('api-auth/', include('rest_framework.urls'))
+	path('api-auth/', include('rest_framework.urls'),
+    ),
+    path('similar-products/<int:pk>/', SimilarProductViewSet.as_view({'get': 'list'}))
 ]
-
-
-

@@ -98,7 +98,6 @@ class Product(models.Model):
     item = models.CharField(db_column='item', max_length=100, blank=True)
     title = models.CharField(db_column='title', max_length=100, blank=True)
     collection = models.ForeignKey(Collection, related_name='collecitons_list', on_delete=models.CASCADE, null=True)
-    #collection = models.CharField(max_length=256, choices=list(Collection.objects.values_list("title", "title")), null= True, blank=True)
     description = RichTextField(blank=True, null=True)
     price = models.IntegerField(db_column='price', blank=True, default=0)
     discount = models.IntegerField(db_column='discount', blank=True, default=0)
