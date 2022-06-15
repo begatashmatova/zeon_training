@@ -32,7 +32,7 @@ class PublicOfferSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PublicOffer
         fields = ('id', 'title', 'description')
-        
+
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,5 +44,13 @@ class ProductSerializer(serializers.ModelSerializer):
     colors = ProductImageSerializer(many=True, read_only=True)
     class Meta:
         model = Product
-        fields = ('item', 'title', 'description', 'colors')
+        fields = ('item', 'title', 'collection', 'description', 'price', 'discount', 'old_price', 'size', 'size_count', 'fabric', 'fabric_composition', 'hits', 'novelty', 'favorite', 'colors')
+
+
+
+class SimilarProductSerializer(serializers.ModelSerializer):
+    colors = ProductImageSerializer(many=True, read_only=True)
+    class Meta:
+        model = Product
+        fields = ('id', 'title', 'price', 'discount', 'old_price', 'size', 'size_count', 'favorite', 'colors')
 
