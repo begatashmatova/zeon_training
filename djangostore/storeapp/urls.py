@@ -16,11 +16,14 @@ router.register(r'posts', PostViewSet)
 router.register(r'news', NewsViewSet)
 router.register(r'publicoffer', PublicOfferViewSet)
 router.register(r'products', ProductViewSet)
+router.register(r'favorite-products', NoveltyProductViewSet)
 
 # specify URL Path for rest_framework
 urlpatterns = [
 	path('', include(router.urls)),
 	path('api-auth/', include('rest_framework.urls'),
     ),
-    path('similar-products/<int:pk>/', SimilarProductViewSet.as_view({'get': 'list'}))
+    path('similar-products/<int:pk>/<str:item>', SimilarProductViewSet.as_view({'get': 'list'})),
+    path('products-collection/<int:collection_id>/<str:collection>', ProductCollectionViewSet.as_view({'get': 'list'}))
 ]
+

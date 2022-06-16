@@ -47,10 +47,17 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ('item', 'title', 'collection', 'description', 'price', 'discount', 'old_price', 'size', 'size_count', 'fabric', 'fabric_composition', 'hits', 'novelty', 'favorite', 'colors')
 
 
-
 class SimilarProductSerializer(serializers.ModelSerializer):
     colors = ProductImageSerializer(many=True, read_only=True)
     class Meta:
         model = Product
         fields = ('id', 'title', 'price', 'discount', 'old_price', 'size', 'size_count', 'favorite', 'colors')
+
+
+class ProductCollectionSerializer(serializers.ModelSerializer):
+    colors = ProductImageSerializer(many=True, read_only=True)
+    class Meta:
+        model = Product
+        fields = ('id', 'title', 'price', 'discount', 'old_price', 'size', 'favorite', 'colors')
+
 
