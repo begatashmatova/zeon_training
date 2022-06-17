@@ -61,3 +61,12 @@ class ProductCollectionSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'price', 'discount', 'old_price', 'size', 'favorite', 'colors')
 
 
+class FavoriteProductSerializer(serializers.ModelSerializer):
+    colors = ProductImageSerializer(many=True, read_only=True)
+    favs = serializers.SerializerMethodField()
+    class Meta:
+        model = Product
+        fields = ('id', 'title', 'price', 'discount', 'old_price', 'size', 'favorite', 'colors', 'favs')
+
+    def get_favs(self, obj):
+        return {"favs": self.context.get("favs")}

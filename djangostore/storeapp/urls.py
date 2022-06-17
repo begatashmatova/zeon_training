@@ -16,7 +16,8 @@ router.register(r'posts', PostViewSet)
 router.register(r'news', NewsViewSet)
 router.register(r'publicoffer', PublicOfferViewSet)
 router.register(r'products', ProductViewSet)
-router.register(r'favorite-products', NoveltyProductViewSet)
+router.register(r'novelty-products', NoveltyProductViewSet)
+router.register(r'favorite-products', FavoriteProductViewSet)
 
 # specify URL Path for rest_framework
 urlpatterns = [
