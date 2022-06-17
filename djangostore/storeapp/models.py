@@ -140,3 +140,20 @@ class ProductImage(models.Model):
 
 
 
+# Help
+class Help(models.Model):
+    question = models.CharField(db_column='quesion', max_length=100, blank=True)
+    answer = models.CharField(db_column='answer', max_length=100, blank=True)
+    class Meta:
+        db_table = 'help'
+        verbose_name = 'Help'
+        verbose_name_plural = 'Help'
+
+
+# HelpImage
+class HelpImage(models.Model):
+    image = models.ImageField(null=True, blank=True, upload_to='images/')
+    class Meta:
+        db_table = 'helpimage'
+        verbose_name = 'HelpImage'
+        verbose_name_plural = 'HelpImage'

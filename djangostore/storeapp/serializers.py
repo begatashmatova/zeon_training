@@ -8,6 +8,8 @@ from .models import News
 from .models import PublicOffer
 from .models import Product
 from .models import ProductImage
+from .models import Help
+from .models import HelpImage
   
 # Create a model serializer 
 class CollectionSerializer(serializers.HyperlinkedModelSerializer):
@@ -70,3 +72,17 @@ class FavoriteProductSerializer(serializers.ModelSerializer):
 
     def get_favs(self, obj):
         return {"favs": self.context.get("favs")}
+
+
+class HelpImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HelpImage
+        fields = ['image', ]
+
+class HelpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Help
+        fields = ['question', 'answer']
+
+
+

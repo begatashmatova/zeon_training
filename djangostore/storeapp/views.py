@@ -1,9 +1,12 @@
 import random
+from itertools import chain 
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 # import local data
-from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer, SimilarProductSerializer, ProductCollectionSerializer, FavoriteProductSerializer
+from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer, SimilarProductSerializer, ProductCollectionSerializer, FavoriteProductSerializer, HelpImageSerializer, HelpSerializer
 #from .serializers import PostSerializer
 from .pagination import CustomPageNumberPagination, CustomCollectionPagination
 
@@ -12,6 +15,8 @@ from .models import Post
 from .models import News
 from .models import PublicOffer
 from .models import Product
+from .models import Help
+from .models import HelpImage
 
 # create a viewset
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -146,4 +151,15 @@ class FavoriteProductViewSet(viewsets.ModelViewSet):
             "favs": Product.objects.filter(favorite=True).count()
         })
         return context
+
+
+class HelpViewSet(APIView):
+    def get(self, request, *args, **kwargs):
+        q1 = Help.objects.all()
+        q2 = HelpImage.objects.all()
+
+        ser1 = HelpSerializer(q1, many=True)
+        ser2 = HelpImageSerializer(q2, many=True)
+
+        return Response({'image':ser2.data, 'questions': ser1.data}) 
 

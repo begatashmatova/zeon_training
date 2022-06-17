@@ -8,6 +8,8 @@ from .models import MainPage
 
 from .models import Product
 from .models import ProductImage
+from .models import Help
+from .models import HelpImage
 
 # Register your models here.
 class BenefitAdmin(admin.ModelAdmin):
@@ -54,3 +56,15 @@ class ProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 
+
+class HelpAdmin(admin.ModelAdmin):
+    list_display = ('question', 'answer')
+
+admin.site.register(Help, HelpAdmin)
+
+
+class HelpImageAdmin(admin.ModelAdmin):
+    list_display = ('image',)
+    max_num = 1
+
+admin.site.register(HelpImage, HelpImageAdmin)
