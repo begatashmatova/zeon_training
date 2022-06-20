@@ -24,7 +24,10 @@ urlpatterns = [
     path(
         'products-collection/<int:collection_id>/<str:collection>',
         ProductCollectionViewSet.as_view({'get': 'list'})
-    ),
+    ), 
     path('help/', HelpViewSet.as_view()),
-    path('call-form/', call)
+    path('call-form/', call),
+    path('product-list/', SearchProductView.as_view())
 ]
+
+

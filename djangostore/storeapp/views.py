@@ -4,6 +4,9 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import generics
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer, SimilarProductSerializer, ProductCollectionSerializer, FavoriteProductSerializer, HelpImageSerializer, HelpSerializer
 from .pagination import CustomPageNumberPagination, CustomCollectionPagination
 from .forms import CallForm
@@ -165,3 +168,37 @@ def call(request):
         if form.is_valid():
             form.save()
     return render(request, 'call.html', {'form': form})
+
+
+class SearchProductView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']
+
+    def filter_queryset(self, queryset):
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(self.request, queryset, self)
+        
+        if queryset.count() == 0:
+            items = []
+            coll_list = list(Product.objects.values('collection_id').distinct())
+            coll_amount = len(coll_list)
+            i = 0
+            collections = []
+            while i < coll_amount:
+                collections.append(coll_list[i]['collection_id'])
+                i += 1
+
+            for coll in collections:
+                coll_items = Product.objects.filter(collection_id=coll)
+                random_range = len(coll_items)
+                item = coll_items[random.randrange(0, random_range)]
+                items.append(item)
+
+            if len(items) > 5:
+                queryset = items.order_by('-id')[:5]
+            else:
+                queryset = items
+
+        return queryset

@@ -96,4 +96,5 @@ class CallAdmin(admin.ModelAdmin):
     list_filter = ('call_status',)
     search_fields = ['name', 'number']
 
-admin.site.register
+admin.site.register(Call, CallAdmin)
+

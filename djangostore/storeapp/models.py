@@ -42,7 +42,7 @@ class Post(models.Model):
     class Meta:
         db_table = 'post'
         verbose_name = 'Post'
-        verbose_name_plural = 'Posts'
+        verbose_name_plural = 'О нас'
 
     def __str__(self):
         return self.title
@@ -126,7 +126,7 @@ class Product(models.Model):
             self.old_price = self.price + self.price*self.discount/100
         a = self.size.split('-')
         if len(a) > 1:
-            self.size_count = (int(a[1].strip()) - int(a[0].strip()))/2
+            self.size_count = (int(a[1].strip()) - int(a[0].strip()))/2 + 1
         else:
             self.size_count = 1
         super(Product, self).save(*args, **kwargs)
