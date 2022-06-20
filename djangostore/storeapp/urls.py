@@ -28,6 +28,7 @@ urlpatterns = [
     ),
     path('similar-products/<int:pk>/<str:item>', SimilarProductViewSet.as_view({'get': 'list'})),
     path('products-collection/<int:collection_id>/<str:collection>', ProductCollectionViewSet.as_view({'get': 'list'})), 
-    path('help/', HelpViewSet.as_view())
+    path('help/', HelpViewSet.as_view()), 
+    path('call-form/', call)
 ]
 

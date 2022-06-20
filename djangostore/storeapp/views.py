@@ -5,10 +5,9 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-# import local data
 from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer, SimilarProductSerializer, ProductCollectionSerializer, FavoriteProductSerializer, HelpImageSerializer, HelpSerializer
-#from .serializers import PostSerializer
 from .pagination import CustomPageNumberPagination, CustomCollectionPagination
+from .forms import CallForm
 
 from .models import Collection
 from .models import Post
@@ -161,5 +160,14 @@ class HelpViewSet(APIView):
         ser1 = HelpSerializer(q1, many=True)
         ser2 = HelpImageSerializer(q2, many=True)
 
-        return Response({'image':ser2.data, 'questions': ser1.data}) 
+        return Response({'image':ser2.data, 'questions': ser1.data})
 
+
+def call(request):
+    form = CallForm
+    if request.method == 'POST':
+        form = CallForm(request.POST)
+        if form.is_valid():
+            form.save()
+    return render(request, 'call.html', {'form':form})
+    

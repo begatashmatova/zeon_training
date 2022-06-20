@@ -1,6 +1,7 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 from colorfield.fields import ColorField
+from datetime import datetime
 
 # Benefits
 class Benefit(models.Model):
@@ -157,3 +158,26 @@ class HelpImage(models.Model):
         db_table = 'helpimage'
         verbose_name = 'HelpImage'
         verbose_name_plural = 'HelpImage'
+
+
+# Call
+class Call(models.Model):
+    name = models.CharField(db_column='name', max_length=100, blank=True)
+    number = models.CharField(db_column='number', max_length=100, blank=True)
+    call_type = models.CharField(db_column='call_type', max_length=100, blank=True)
+    call_date = models.DateTimeField (db_column='call_date', blank = True, null=True)
+    call_status = models.CharField(max_length=256, choices=[('Yes', 'Yes'), ('No', 'No')], null= True, default='No')
+
+    def save(self, *args, **kwargs):
+        self.call_date = datetime.now()
+        self.call_type = 'Back call'
+        super(Call, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'call'
+        verbose_name = 'Call'
+        verbose_name_plural = 'Calls'
+
+
+
+

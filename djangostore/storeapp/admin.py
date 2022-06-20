@@ -10,6 +10,7 @@ from .models import Product
 from .models import ProductImage
 from .models import Help
 from .models import HelpImage
+from .models import Call
 
 # Register your models here.
 class BenefitAdmin(admin.ModelAdmin):
@@ -68,3 +69,11 @@ class HelpImageAdmin(admin.ModelAdmin):
     max_num = 1
 
 admin.site.register(HelpImage, HelpImageAdmin)
+
+
+class CallAdmin(admin.ModelAdmin):
+    list_display = ('name', 'number', 'call_type', 'call_date', 'call_status')
+    list_filter = ('call_status',)
+    search_fields = ['name', 'number']
+
+admin.site.register(Call, CallAdmin)
