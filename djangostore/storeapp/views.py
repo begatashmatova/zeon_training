@@ -1,15 +1,15 @@
 import random
-from itertools import chain 
+from itertools import chain
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
-# import local data
+from rest_framework import generics
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer, SimilarProductSerializer, ProductCollectionSerializer, FavoriteProductSerializer, HelpImageSerializer, HelpSerializer
-#from .serializers import PostSerializer
 from .pagination import CustomPageNumberPagination, CustomCollectionPagination
-
+from .forms import CallForm
 from .models import Collection
 from .models import Post
 from .models import News
@@ -18,34 +18,32 @@ from .models import Product
 from .models import Help
 from .models import HelpImage
 
-# create a viewset
+
 class CollectionViewSet(viewsets.ModelViewSet):
-	# define queryset
-	queryset = Collection.objects.all()
-	pagination_class = CustomPageNumberPagination
-	# specify serializer to be used
-	serializer_class = CollectionSerializer
+    queryset = Collection.objects.all()
+    pagination_class = CustomPageNumberPagination
+    serializer_class = CollectionSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
-	queryset = Post.objects.all()
-	serializer_class = PostSerializer
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
 
 class NewsViewSet(viewsets.ModelViewSet):
-	queryset = News.objects.all()
-	pagination_class = CustomPageNumberPagination
-	serializer_class = NewsSerializer
+    queryset = News.objects.all()
+    pagination_class = CustomPageNumberPagination
+    serializer_class = NewsSerializer
 
 
 class PublicOfferViewSet(viewsets.ModelViewSet):
-	queryset = PublicOffer.objects.all()
-	serializer_class = PublicOfferSerializer
+    queryset = PublicOffer.objects.all()
+    serializer_class = PublicOfferSerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-	queryset = Product.objects.all()
-	serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
 
 class SimilarProductViewSet(viewsets.ModelViewSet):
@@ -66,7 +64,7 @@ class SimilarProductViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)   
+        return Response(serializer.data)
 
 
 class ProductCollectionViewSet(viewsets.ModelViewSet):
@@ -85,7 +83,7 @@ class ProductCollectionViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)   
+        return Response(serializer.data)
 
 
 class NoveltyProductViewSet(viewsets.ModelViewSet):
@@ -104,7 +102,7 @@ class NoveltyProductViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)   
+        return Response(serializer.data)
 
 
 class FavoriteProductViewSet(viewsets.ModelViewSet):
@@ -123,7 +121,7 @@ class FavoriteProductViewSet(viewsets.ModelViewSet):
             while i < coll_amount:
                 collections.append(coll_list[i]['collection_id'])
                 i += 1
-            
+
             for coll in collections:
                 coll_items = Product.objects.filter(collection_id=coll)
                 random_range = len(coll_items)
@@ -142,8 +140,7 @@ class FavoriteProductViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data) 
-
+        return Response(serializer.data)
 
     def get_serializer_context(self):
         context = super(FavoriteProductViewSet, self).get_serializer_context()
@@ -161,5 +158,47 @@ class HelpViewSet(APIView):
         ser1 = HelpSerializer(q1, many=True)
         ser2 = HelpImageSerializer(q2, many=True)
 
-        return Response({'image':ser2.data, 'questions': ser1.data}) 
+        return Response({'image': ser2.data, 'questions': ser1.data})
 
+
+def call(request):
+    form = CallForm
+    if request.method == 'POST':
+        form = CallForm(request.POST)
+        if form.is_valid():
+            form.save()
+    return render(request, 'call.html', {'form': form})
+
+
+class SearchProductView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']
+
+    def filter_queryset(self, queryset):
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(self.request, queryset, self)
+        
+        if queryset.count() == 0:
+            items = []
+            coll_list = list(Product.objects.values('collection_id').distinct())
+            coll_amount = len(coll_list)
+            i = 0
+            collections = []
+            while i < coll_amount:
+                collections.append(coll_list[i]['collection_id'])
+                i += 1
+
+            for coll in collections:
+                coll_items = Product.objects.filter(collection_id=coll)
+                random_range = len(coll_items)
+                item = coll_items[random.randrange(0, random_range)]
+                items.append(item)
+
+            if len(items) > 5:
+                queryset = items.order_by('-id')[:5]
+            else:
+                queryset = items
+
+        return queryset
