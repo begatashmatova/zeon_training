@@ -1,15 +1,14 @@
-# import serializer from rest_framework
 from rest_framework import serializers
-  
-# import model from models.py
 from .models import Collection
 from .models import Post
 from .models import News
 from .models import PublicOffer
 from .models import Product
 from .models import ProductImage
-  
-# Create a model serializer 
+from .models import Help
+from .models import HelpImage
+
+
 class CollectionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Collection
@@ -32,7 +31,7 @@ class PublicOfferSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PublicOffer
         fields = ('id', 'title', 'description')
-        
+
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,7 +41,91 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     colors = ProductImageSerializer(many=True, read_only=True)
+
     class Meta:
         model = Product
-        fields = ('item', 'title', 'description', 'colors')
+        fields = (
+            'item',
+            'title',
+            'collection',
+            'description',
+            'price',
+            'discount',
+            'old_price',
+            'size',
+            'size_count',
+            'fabric',
+            'fabric_composition',
+            'hits',
+            'novelty',
+            'favorite',
+            'colors'
+        )
 
+
+class SimilarProductSerializer(serializers.ModelSerializer):
+    colors = ProductImageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Product
+        fields = (
+            'id',
+            'title',
+            'price',
+            'discount',
+            'old_price',
+            'size',
+            'size_count',
+            'favorite',
+            'colors'
+        )
+
+
+class ProductCollectionSerializer(serializers.ModelSerializer):
+    colors = ProductImageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Product
+        fields = (
+            'id',
+            'title',
+            'price',
+            'discount',
+            'old_price',
+            'size',
+            'favorite',
+            'colors'
+        )
+
+
+class FavoriteProductSerializer(serializers.ModelSerializer):
+    colors = ProductImageSerializer(many=True, read_only=True)
+    favs = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = (
+            'id',
+            'title',
+            'price',
+            'discount',
+            'old_price',
+            'size',
+            'favorite',
+            'colors'
+        )
+
+    def get_favs(self, obj):
+        return {"favs": self.context.get("favs")}
+
+
+class HelpImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HelpImage
+        fields = ['image', ]
+
+
+class HelpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Help
+        fields = ['question', 'answer']
