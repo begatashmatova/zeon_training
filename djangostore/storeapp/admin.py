@@ -10,7 +10,8 @@ from .models import ProductImage
 from .models import Help
 from .models import HelpImage
 from .models import Call
-
+from .models import Footer
+from .models import ContactInfo
 
 class BenefitAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'icon')
@@ -98,3 +99,19 @@ class CallAdmin(admin.ModelAdmin):
 
 admin.site.register(Call, CallAdmin)
 
+
+class FooterInline(admin.TabularInline):
+    model = ContactInfo
+    extra = 0
+    max_num = 8
+
+
+class FooterAdmin(admin.ModelAdmin):
+    list_display = (
+        'description', 'header_logo', 'footer_logo', 'header_number'
+    )
+    inlines = [
+        FooterInline,
+    ]
+
+admin.site.register(Footer, FooterAdmin)
