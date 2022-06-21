@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer, SimilarProductSerializer, ProductCollectionSerializer, FavoriteProductSerializer, HelpImageSerializer, HelpSerializer
+from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer, SimilarProductSerializer, ProductCollectionSerializer, FavoriteProductSerializer, HelpImageSerializer, HelpSerializer, MainPageSerializer, BenefitSerializer
 from .pagination import CustomPageNumberPagination, CustomCollectionPagination
 from .forms import CallForm
 from .models import Collection
@@ -17,7 +17,10 @@ from .models import PublicOffer
 from .models import Product
 from .models import Help
 from .models import HelpImage
+from .models import MainPage
+from .models import Benefit
 
+from django.core.paginator import Paginator
 
 class CollectionViewSet(viewsets.ModelViewSet):
     queryset = Collection.objects.all()
@@ -44,6 +47,7 @@ class PublicOfferViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    pagination_class = CustomPageNumberPagination
 
 
 class SimilarProductViewSet(viewsets.ModelViewSet):
@@ -202,3 +206,32 @@ class SearchProductView(generics.ListAPIView):
                 queryset = items
 
         return queryset
+
+
+class MainSlider(APIView):
+    def get(self, request, *args, **kwargs):
+        main_page = MainPage.objects.all()
+
+        hits = Product.objects.filter(hits=True)
+        if hits.count() > 8:
+            hits = hits.order_by('-id')[:8]
+
+        novelties = Product.objects.filter(novelty=True)
+        if novelties.count() > 4:
+            novelties = novelties.order_by('-id')[:4]
+
+        collections = Collection.objects.all()
+        if collections.count() > 4:
+            collections = collections.order_by('-id')[:4]
+
+        benefits = Benefit.objects.all()
+        if benefits.count() > 4:
+            benefits = benefits.order_by('-id')[:4]
+
+        ser1 = MainPageSerializer(main_page, many=True)
+        ser2 = ProductCollectionSerializer(hits, many=True)
+        ser3 = ProductCollectionSerializer(novelties, many=True)
+        ser4 = CollectionSerializer(collections, many=True)
+        ser5 = BenefitSerializer(benefits, many=True)
+
+        return Response({'main_page': ser1.data, 'hits': ser2.data, 'novelties': ser3.data, 'collections': ser4.data, 'benefits': ser5.data})

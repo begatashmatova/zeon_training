@@ -7,6 +7,8 @@ from .models import Product
 from .models import ProductImage
 from .models import Help
 from .models import HelpImage
+from .models import MainPage
+from .models import Benefit
 
 
 class CollectionSerializer(serializers.HyperlinkedModelSerializer):
@@ -129,3 +131,15 @@ class HelpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Help
         fields = ['question', 'answer']
+
+
+class MainPageSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = MainPage
+        fields = ('link', 'photo')
+
+
+class BenefitSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Benefit
+        fields = ('icon', 'title', 'description')
