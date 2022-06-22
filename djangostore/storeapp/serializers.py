@@ -9,7 +9,8 @@ from .models import Help
 from .models import HelpImage
 from .models import MainPage
 from .models import Benefit
-
+from .models import ContactInfo
+from .models import Footer
 
 class CollectionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -143,3 +144,26 @@ class BenefitSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Benefit
         fields = ('icon', 'title', 'description')
+
+
+class ContactInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactInfo
+        fields = [
+            'network_type',
+            'contact'
+        ]
+
+
+class FooterSerializer(serializers.ModelSerializer):
+    contacts = ContactInfoSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Footer
+        fields = (
+            'description',
+            'header_logo',
+            'footer_logo',
+            'header_number',
+            'contacts'
+        )

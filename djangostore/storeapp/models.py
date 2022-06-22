@@ -237,7 +237,13 @@ class Footer(models.Model):
 class ContactInfo(models.Model):
     network_type = models.CharField(
         max_length=256,
-        choices=[('Telegram', 'Telegram'), ('Whatsapp', 'Whatsapp'), ('Instagram', 'Instagram')],
+        choices=[
+            ('Telegram', 'Telegram'),
+            ('Whatsapp', 'Whatsapp'),
+            ('Instagram', 'Instagram'),
+            ('Mail', 'Mail'),
+            ('Phone', 'Phone')
+        ],
         null=True
     )
     contact = models.CharField(db_column='contact', max_length=100, blank=False)
@@ -254,6 +260,10 @@ class ContactInfo(models.Model):
             self.contact = 'https://wa.me/' + self.contact
         if self.network_type == 'Instagram':
             self.contact = 'https://www.instagram.com/' + self.contact
+        if self.network_type == 'Mail':
+            self.contact = 'mailto:' + self.contact
+        if self.network_type == 'Phone':
+            self.contact = 'callto:' + self.contact
         super(ContactInfo, self).save(*args, **kwargs)
 
     class Meta:

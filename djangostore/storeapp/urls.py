@@ -12,7 +12,7 @@ router.register(r'publicoffer', PublicOfferViewSet)
 router.register(r'products', ProductViewSet)
 router.register(r'novelty-products', NoveltyProductViewSet)
 router.register(r'favorite-products', FavoriteProductViewSet)
-# router.register(r'slider', MainSlider)
+router.register(r'footer', FooterViewSet)
 
 
 urlpatterns = [

@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer, SimilarProductSerializer, ProductCollectionSerializer, FavoriteProductSerializer, HelpImageSerializer, HelpSerializer, MainPageSerializer, BenefitSerializer
+from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer, SimilarProductSerializer, ProductCollectionSerializer, FavoriteProductSerializer, HelpImageSerializer, HelpSerializer, MainPageSerializer, BenefitSerializer, FooterSerializer
 from .pagination import CustomPageNumberPagination, CustomCollectionPagination
 from .forms import CallForm
 from .models import Collection
@@ -19,6 +19,7 @@ from .models import Help
 from .models import HelpImage
 from .models import MainPage
 from .models import Benefit
+from .models import Footer
 
 from django.core.paginator import Paginator
 
@@ -235,3 +236,8 @@ class MainSlider(APIView):
         ser5 = BenefitSerializer(benefits, many=True)
 
         return Response({'main_page': ser1.data, 'hits': ser2.data, 'novelties': ser3.data, 'collections': ser4.data, 'benefits': ser5.data})
+
+
+class FooterViewSet(viewsets.ModelViewSet):
+    queryset = Footer.objects.all()
+    serializer_class = FooterSerializer
