@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_filters',
     'ckeditor',
     'colorfield',
+    'phonenumber_field',
 
     'storeapp'
 ]

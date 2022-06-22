@@ -2,6 +2,7 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from colorfield.fields import ColorField
 from datetime import datetime
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Benefit(models.Model):
@@ -219,3 +220,53 @@ class Call(models.Model):
         db_table = 'call'
         verbose_name = 'Call'
         verbose_name_plural = 'Calls'
+
+
+class Footer(models.Model):
+    description = models.CharField(db_column='description', max_length=100, blank=False)
+    header_logo = models.ImageField(null=True, blank=True, upload_to='images/')
+    footer_logo = models.ImageField(null=True, blank=True, upload_to='images/')
+    header_number = PhoneNumberField(null=False, blank=False, unique=True)
+
+    class Meta:
+        db_table = 'footer'
+        verbose_name = 'Footer'
+        verbose_name_plural = 'Footer'
+
+
+class ContactInfo(models.Model):
+    network_type = models.CharField(
+        max_length=256,
+        choices=[
+            ('Telegram', 'Telegram'),
+            ('Whatsapp', 'Whatsapp'),
+            ('Instagram', 'Instagram'),
+            ('Mail', 'Mail'),
+            ('Phone', 'Phone')
+        ],
+        null=True
+    )
+    contact = models.CharField(db_column='contact', max_length=100, blank=False)
+    footer = models.ForeignKey(
+        Footer,
+        related_name='contacts',
+        on_delete=models.CASCADE
+    )
+
+    def save(self, *args, **kwargs):
+        if self.network_type == 'Telegram':
+            self.contact = 'https://t.me/' + self.contact
+        if self.network_type == 'Whatsapp':
+            self.contact = 'https://wa.me/' + self.contact
+        if self.network_type == 'Instagram':
+            self.contact = 'https://www.instagram.com/' + self.contact
+        if self.network_type == 'Mail':
+            self.contact = 'mailto:' + self.contact
+        if self.network_type == 'Phone':
+            self.contact = 'callto:' + self.contact
+        super(ContactInfo, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'contactinfo'
+        verbose_name = 'ContactInfo'
+        verbose_name_plural = 'ContactInfo'
