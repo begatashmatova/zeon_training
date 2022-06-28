@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer, SimilarProductSerializer, ProductCollectionSerializer, FavoriteProductSerializer, HelpImageSerializer, HelpSerializer, MainPageSerializer, BenefitSerializer, FooterSerializer
+from .serializers import CollectionSerializer, PostSerializer, NewsSerializer, PublicOfferSerializer, ProductSerializer, SimilarProductSerializer, ProductCollectionSerializer, FavoriteProductSerializer, HelpImageSerializer, HelpSerializer, MainPageSerializer, BenefitSerializer, FooterSerializer, OrderSerializer, ShippingSerializer
 from .pagination import CustomPageNumberPagination, CustomCollectionPagination
 from .forms import CallForm
 from .models import Collection
@@ -20,8 +20,17 @@ from .models import HelpImage
 from .models import MainPage
 from .models import Benefit
 from .models import Footer
+from .models import CartItem
+from .models import ShippingAddress
+
+from .models import Cart
+from .models import Order
+from .serializers import CartSerializer
 
 from django.core.paginator import Paginator
+
+from rest_framework.decorators import api_view
+from rest_framework import status
 
 class CollectionViewSet(viewsets.ModelViewSet):
     queryset = Collection.objects.all()
@@ -241,3 +250,37 @@ class MainSlider(APIView):
 class FooterViewSet(viewsets.ModelViewSet):
     queryset = Footer.objects.all()
     serializer_class = FooterSerializer
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = CartItem.objects.all()
+    serializer_class = OrderSerializer
+
+
+class CartViewSet(viewsets.ModelViewSet):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+
+
+
+@api_view(['POST', 'GET'])
+def shipping(request):
+    if request.method == 'GET':
+        snippets = ShippingAddress.objects.all()
+        serializer = ShippingSerializer(snippets, many=True)
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+        serializer = ShippingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            order = serializer.data['order']
+            cart = Order.objects.values('cart_id').filter(pk=order)[0]['cart_id']
+            CartItem.objects.filter(cart_id=cart).update(order_id=order)
+
+            # record = Cart.objects.get(id = cart)
+            # record.delete()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
