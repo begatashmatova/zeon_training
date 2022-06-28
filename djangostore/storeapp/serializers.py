@@ -11,6 +11,12 @@ from .models import MainPage
 from .models import Benefit
 from .models import ContactInfo
 from .models import Footer
+from .models import CartItem
+from .models import Cart
+from .models import Customer
+from .models import Order
+from .models import ShippingAddress
+
 
 class CollectionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -166,4 +172,62 @@ class FooterSerializer(serializers.ModelSerializer):
             'footer_logo',
             'header_number',
             'contacts'
+        )
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = ('product', 'date_added', 'quantity', 'get_total')
+
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ('user', 'name', 'email')
+
+
+class ShippingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShippingAddress
+        fields = (
+            'customer',
+            'address',
+            'city',
+            'country',
+            'order'
+        )
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = ['product', 'quantity', 'date_added', 'id']
+
+
+class CartSerializer(serializers.ModelSerializer):
+    cartitems = CartItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Cart
+        fields = (
+            'id',
+            'customer',
+            'date_ordered',
+            'get_cart_total',
+            'cartitems'
+        )
+
+
+class OrderHistorySerializer(serializers.ModelSerializer):
+    cartitems = CartItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Order
+        fields = (
+            'id',
+            'customer',
+            'date_ordered',
+            'get_cart_total',
+            'cartitems'
         )

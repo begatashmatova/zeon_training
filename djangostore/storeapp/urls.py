@@ -13,6 +13,9 @@ router.register(r'products', ProductViewSet)
 router.register(r'novelty-products', NoveltyProductViewSet)
 router.register(r'favorite-products', FavoriteProductViewSet)
 router.register(r'footer', FooterViewSet)
+router.register(r'order', OrderViewSet)
+
+router.register(r'cart', CartViewSet)
 
 
 urlpatterns = [
@@ -29,7 +32,10 @@ urlpatterns = [
     path('help/', HelpViewSet.as_view()),
     path('main-slider/', MainSlider.as_view()),
     path('call-form/', call),
-    path('product-list/', SearchProductView.as_view())
+    path('product-list/', SearchProductView.as_view()),
+    path('shipping/', shipping) 
 ]
+
+
 
 
