@@ -1,26 +1,41 @@
-# basic URL Configurations
 from django.urls import include, path
-# import routers
 from rest_framework import routers
-
-# import everything from views
+from rest_framework import renderers
 from .views import *
 
-# define the router
-router = routers.DefaultRouter()
 
-# define the router path and viewset to be used
+router = routers.DefaultRouter()
 router.register(r'collections', CollectionViewSet)
 router.register(r'posts', PostViewSet)
 router.register(r'news', NewsViewSet)
 router.register(r'publicoffer', PublicOfferViewSet)
 router.register(r'products', ProductViewSet)
+router.register(r'novelty-products', NoveltyProductViewSet)
+router.register(r'favorite-products', FavoriteProductViewSet)
+router.register(r'footer', FooterViewSet)
+router.register(r'order', OrderViewSet)
 
-# specify URL Path for rest_framework
+router.register(r'cart', CartViewSet)
+
+
 urlpatterns = [
-	path('', include(router.urls)),
-	path('api-auth/', include('rest_framework.urls'))
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls'),),
+    path(
+        'similar-products/<int:pk>/<str:item>',
+        SimilarProductViewSet.as_view({'get': 'list'})
+    ),
+    path(
+        'products-collection/<int:collection_id>/<str:collection>',
+        ProductCollectionViewSet.as_view({'get': 'list'})
+    ), 
+    path('help/', HelpViewSet.as_view()),
+    path('main-slider/', MainSlider.as_view()),
+    path('call-form/', call),
+    path('product-list/', SearchProductView.as_view()),
+    path('shipping/', shipping) 
 ]
+
 
 
 
